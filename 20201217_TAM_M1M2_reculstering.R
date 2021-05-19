@@ -10,36 +10,22 @@ library(randomcoloR)
 library(RColorBrewer)
 library(monocle)
 
-
-
-
-
-
-############Start line219
+################
 setwd("E:/BaiduNetdiskDownload/Manuscript of scRNAseq BCL9 KD in mouse TIME/revised")
 
-
-
-
+pbmc<-readRDS("bcl9_all_cells_data.rds") #reference https://doi.org/10.3389/fonc.2020.603702
 
 hsBCL9_pbmc_part<- pbmc[,which(pbmc$seurat_clusters %in% c(3))]
 
-
 hsBCL9_pbmc_part <- ScaleData(hsBCL9_pbmc_part)
 hsBCL9_pbmc_part <- FindVariableFeatures(hsBCL9_pbmc_part, selection.method = "vst", nfeatures = 2000)
-
 
 all.genes <- rownames(hsBCL9_pbmc_part)
 hsBCL9_pbmc_part <- ScaleData(hsBCL9_pbmc_part, features = rownames(hsBCL9_pbmc_part),block.size = 100,min.cells.to.block = 1000)
 hsBCL9_pbmc_part <- RunPCA(hsBCL9_pbmc_part)
 
-
-
-
 hsBCL9_pbmc_part <- RunUMAP(hsBCL9_pbmc_part, dims = 1:20)#20
-
 hsBCL9_pbmc_part <- RunTSNE(hsBCL9_pbmc_part, dims = 1:20)#20
-
 hsBCL9_pbmc_part <- FindNeighbors(hsBCL9_pbmc_part, dims = 1:10)
 hsBCL9_pbmc_part <- FindClusters(hsBCL9_pbmc_part, resolution = 0.2)#0.5
 hsBCL9_pbmc_part<- hsBCL9_pbmc_part[,which(!(hsBCL9_pbmc_part$seurat_clusters %in% c(6:8)))]
@@ -62,13 +48,7 @@ hsBCL9_pbmc_part <- RunTSNE(hsBCL9_pbmc_part, dims = 1:20)#20
 hsBCL9_pbmc_part <- FindNeighbors(hsBCL9_pbmc_part, dims = 1:5)
 hsBCL9_pbmc_part <- FindClusters(hsBCL9_pbmc_part, resolution = 0.2)#0.5
 
-
-
 hsBCL9_pbmc_part@meta.data[["Perturbed"]] <-hsBCL9_pbmc_part$Group %in% c("veh","NT")
-
-
-
-
 
 palette_seurat_clusters<-distinctColorPalette(length(unique(hsBCL9_pbmc_part$seurat_clusters)))
 #palette_seurat_clusters <- brewer.pal( length(unique(hsBCL9_pbmc_part$seurat_clusters)),name ="Set3")
@@ -147,7 +127,7 @@ top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
 
 ################################################################
-#########################Figure 1 D ############################
+#########################Figure 2 D ############################
 ################################################################
 
 pdf(paste0("TAM_hsBCL9_pbmc_part_Seurat_DoHeatmap_",Sys.Date(),".pdf"),10,40)
