@@ -114,21 +114,10 @@ for (plotgene in endo_list)
 
 
 
-
-
-
-
-
-
 pbmc.markers <- FindAllMarkers(hsBCL9_pbmc_part, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25, num.cores = 64)
 pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
-
-
-################################################################
-#########################Figure 2 D ############################
-################################################################
 
 pdf(paste0("TAM_hsBCL9_pbmc_part_Seurat_DoHeatmap_",Sys.Date(),".pdf"),10,40)
 print(DoHeatmap(hsBCL9_pbmc_part, features = top10$gene) + NoLegend())
@@ -145,8 +134,6 @@ print(DotPlot(hsBCL9_pbmc_part, features = features_gene) + RotatedAxis())
 dev.off()
 
 
-
-
 seurat_clusters_count<-data.frame(seurat_clusters=hsBCL9_pbmc_part$seurat_clusters,Group=hsBCL9_pbmc_part$Group)
 seurat_clusters_count<-t(table(seurat_clusters_count))
 barpt<-ggplot(melt(seurat_clusters_count), aes(fill=Group, y=value, x=as.character(seurat_clusters))) + 
@@ -158,10 +145,6 @@ barpt<-ggplot(melt(seurat_clusters_count), aes(fill=Group, y=value, x=as.charact
 pdf(paste0("TAM_seurat_clusters_barptM1M2_",Sys.Date(),".pdf"))
 barpt
 dev.off()
-
-
-
-
 
 
 
@@ -266,11 +249,6 @@ print(plot_cell_trajectory(HSMM_myo))
 
 
 
-
-
-
-
-
 patient_name<-"BCL9" 
 LSEC_population <- "TAM"
 gc()
@@ -330,12 +308,6 @@ print(plot_pseudotime_heatmap(HSMM_myo[sig_gene_names,],
                               show_rownames = T))
 
 dev.off()
-
-
-
-
-
-
 
 
 
@@ -453,10 +425,6 @@ bar_all_KEGG<-ggplot(All, aes(reorder(NAME, NES), NES, fill=BCL9_Perturbation)) 
 pdf(file="M0_in_BCL9_Perturbation C7_Pathways_NES_from_GSEA.pdf",width=12, height=10)
 bar_all_KEGG
 dev.off()
-
-
-
-
 
 
 
