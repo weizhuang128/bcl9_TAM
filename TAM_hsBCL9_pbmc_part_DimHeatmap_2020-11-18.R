@@ -11,154 +11,13 @@ library(monocle)
 
 
 
-
-
-
-############Start line219
-setwd("E:/BaiduNetdiskDownload/Manuscript of scRNAseq BCL9 KD in mouse TIME/revised")
-
-pbmc<-readRDS("bcl9_all_cells_data.rds")
-
-
-pbmc@meta.data[["Tumor Cell"]] <-pbmc$seurat_clusters %in% c(0,1,2,4)
-pbmc@meta.data[["T Cell"]] <-pbmc$seurat_clusters %in% c(5)
-pbmc@meta.data[["CD8 T Cell"]] <-pbmc$seurat_clusters %in% c(6)
-pbmc@meta.data[["Granulocyte-monocyte / TAM"]] <-pbmc$seurat_clusters %in% c(3)
-pbmc@meta.data[["Endothelial Cell / Fibroblast"]] <-pbmc$seurat_clusters %in% c(7,8)
-
-
-cell_type<-pbmc$seurat_clusters
-cell_type<-recode(cell_type,"0"="Tumor Cell","1"="Tumor Cell","2"="Tumor Cell","4"="Tumor Cell","5"="T Cell","6"="CD8 T Cell","7"="Endothelial Cell / Fibroblast","8"="Endothelial Cell / Fibroblast","3"="Granulocyte-monocyte / TAM")
-pbmc@meta.data[["cell_type"]] <-cell_type
-
-palette_seurat_clusters <- randomColor(length(unique(pbmc$cell_type)))
-pdf(paste0("hsBCL9_Seurat_individualgenes_pbmc_umap_cell_type_",Sys.Date(),".pdf"),12,10)
-print(DimPlot(pbmc, reduction = "umap",label = TRUE,group.by = "cell_type",cols = palette_seurat_clusters ))
-dev.off()
-
-
-palette_seurat_clusters <- randomColor(length(unique(pbmc$seurat_clusters)))
-palette_Sample <- brewer.pal( length(unique(pbmc$Sample)),name ="Set3")
-palette_Group <- brewer.pal( length(unique(pbmc$Group)),name ="Dark2")
-
-pdf(paste0("hsBCL9_Seurat_individualgenes_pbmc_umap_cluster_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "umap",label = TRUE,cols = palette_seurat_clusters ))
-dev.off()
-
-pdf(paste0("hsBCL9_Seurat_individualgenes_pbmc_tsne_cluster_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "tsne",label = TRUE,cols = palette_seurat_clusters))
-dev.off()
-
-pdf(paste0("Figure_1_A_hsBCL9_Seurat_individualgenes_pbmc_umap_Sample_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "umap", group.by = "Sample",label = TRUE ,cols = palette_Sample))
-dev.off()
-
-pdf(paste0("Figure_1_B_hsBCL9_Seurat_individualgenes_pbmc_umap_Group_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "umap", group.by = "Group" ,cols = palette_Group))
-dev.off()
-
-pdf(paste0("hsBCL9_Seurat_individualgenes_pbmc_tsne_Sample_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "tsne", group.by = "Sample",label = TRUE ,cols = palette_Sample))
-dev.off()
-
-pdf(paste0("hsBCL9_Seurat_individualgenes_pbmc_tsne_Group_",Sys.Date(),".pdf"))
-print(DimPlot(pbmc, reduction = "tsne", group.by = "Group" ,cols = palette_Group))
-
-CAF_gene_list<-c("Mzb1","Ighg1","Ighg3","Fcrl5","Cd79a","Cd79b","Kdr","Clec4g","Ehd3","Plpp3","Ednrb","Vwf","Colec11","Col14a1","Col3a1","Cxcl12","Aebp1","Prss23","Dcn","Rarres2","Stab2","Csf1r","Cd3g","Ebf1","Irf8","Sox9","Apoc3","Top2A","Jchain","Dcn","Wnt9b","Rspo3","Cdh13","Wnt2","Ednrb","Jag1","Lrg1","Efnb1","Ltbp4","Adgrg6,Fcgr2b","Gpr182","Acta2","Aebp1","Ccdc80","Cfd","Col12a1","Col1a1","Col1a2","Col3a1","Col5a2","Col6a1","Cox4i2","Ctsk","Dcn","Dpt","Esam","Fstl1","Gja4","Gng11","Gsn","Higd1b","Lum","Mfap5","Mmp11","Myl9","Pdgfra","Postn","Rgs5","Tagln","Thbs2","Vcan","Stab2","Csf1r","Cd3g","Ebf1","Irf8","Sox9","Apoc3","Top2A","Jchain","Dcn","Ptrf","Sdpr","Murc","Prkcdbp","Ehd2","Cav1","Cav2","Cav3","Rarres2","Vwf","Clec4g","Wnt9b","Rspo3","Cdh13","Wnt2","Ednrb","Jag1","Lrg1","Efnb1","Ltbp4","Adgrg6","Fcgr2b","Gpr182","Kdr","Clec4g","Ehd3","Plpp3","Ednrb","Vwf","Colec11","Col14a1","Col3a1","Cxcl12","Aebp1","Prss23","Dcn","Rarres2","Stab2","Csf1r","Cd3g","Ebf1","Irf8","Sox9","Apoc3","Top2A","Jchain","Dcn","Wnt9b","Rspo3","Cdh13","Wnt2","Ednrb","Jag1","Lrg1","Efnb1","Ltbp4","Adgrg6","Fcgr2b","Gpr182","H2−Eb1","Wfdc2","Tmprss2","Krt8","Mlph","Fxyd3","Fam25c","Adig","Cd24a","Gipc2","Prtn3","Gata3","Krt19","Cidec","Chchd10","Cdo1","Areg","Epcam","Wfdc21","Hp","Steap4","Glul","Cd200","AW112010","Mrap","Tmem176a","Prlr","Clu","Cfd","Car3","Tmem176b","Retn","Wfdc18","Lcn2","Sncg","Krt18","Csn3","Krt7","Mgst1","Spint2","Rab25","Lpl","Apoc1","Cldn4","Ltc4s","Plin2","Rgcc","Trf","Stc2","Kdr","Clec4g","Ehd3","Plpp3","Ednrb","Vwf","Colec11","Col14a1","Col3a1","Cxcl12","Aebp1","Prss23","Dcn","Rarres2","Stab2","Csf1r","Cd3g","Ebf1","Irf8","Sox9","Apoc3","Top2A","Jchain","Dcn","Wnt9b","Rspo3","Cdh13","Wnt2","Ednrb","Jag1","Lrg1","Efnb1","Ltbp4","Adgrg6,Fcgr2b","Gpr182","Acta2","Aebp1","Ccdc80","Cfd","Col12a1","Col1a1","Col1a2","Col3a1","Col5a2","Col6a1","Cox4i2","Ctsk","Dcn","Dpt","Esam","Fstl1","Gja4","Gng11","Gsn","Higd1b","Lum","Mfap5","Mmp11","Myl9","Pdgfra","Postn","Rgs5","Tagln","Thbs2","Vcan")
-endo_list<-intersect(rownames(pbmc),CAF_gene_list)
-for (plotgene in endo_list)
-  
-{
-  
-  #plotgene <- "Apoe"
-  pdf(paste0("hsBCL9_Seurat_individualgenes_hsBCL9_pbmc_partgenes_umap_",plotgene,Sys.Date(),".pdf"))
-  print(FeaturePlot(pbmc, features = plotgene,cols = c("grey","red") ))
-  dev.off()
-  
-  pdf(paste0("hsBCL9_Seurat_individualgenes_hsBCL9_pbmc_partgenes_tsne_",plotgene,Sys.Date(),".pdf"))
-  print(FeaturePlot(pbmc, reduction = "tsne",features = plotgene,cols = c("grey","red") ))
-  dev.off()
-  
-}
-
-
-pbmc$seurat_clusters
-
-pbmc.markers <- FindAllMarkers(pbmc, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25, num.cores = 64)
-pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
-top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
-
-
-
-################################################################
-#########################Figure 1 D ############################
-################################################################
-
-pdf(paste0("Figure_1_D_Seurat_DoHeatmap_",Sys.Date(),".pdf"),10,40)
-print(DoHeatmap(pbmc, features = top10$gene) + NoLegend())
-dev.off()
-
-################################################################
-#########################Figure S1 A ############################
-################################################################
-
-features<-c("Ramp2","Egfl7","Plvap","Igfbp7","Rarres2","Dcn","Ccl4","Ccl3","Cxcl3","Cd3g","Cd3e","Gzmb","C1qb","C1qc","Cd74","Lgals7","Birc5")
-
-pdf(paste0("Figure_S1_A_Seurat_DotPlot_3",Sys.Date(),".pdf"))
-print(DotPlot(pbmc, features = features) + RotatedAxis())
-
-dev.off()
-
-
-
-
-################################################################
-######################save endothelial cellss###################
-################################################################
-
-hsBCL9_pbmc_part_filtered_endo<- pbmc[,which(pbmc$seurat_clusters %in% c(7,8))]
-saveRDS(hsBCL9_pbmc_part_filtered_endo, file = "hsBCL9_pbmc_part_filtered_endo.rds")
-
-
-pdf(paste0("Figure_1_F_hsBCL9_Seurat_individualgenes_pbmc_umap_Group_7and8",Sys.Date(),".pdf"))
-print(DimPlot(hsBCL9_pbmc_part_filtered_endo, reduction = "umap", group.by = "Group" ,cols = palette_Group)+xlim(-1,5)+ylim(-9,-14))
-dev.off()
-
-##############################################################
-######################Figure 1E###############################
-##############################################################
-
-
-seurat_clusters_count<-data.frame(seurat_clusters=pbmc$seurat_clusters,Group=pbmc$Group)
-seurat_clusters_count<-t(table(seurat_clusters_count))
-barpt<-ggplot(melt(seurat_clusters_count), aes(fill=Group, y=value, x=as.character(seurat_clusters))) + 
-  geom_bar(position="fill", stat="identity")+
-  scale_fill_manual(values = palette_Group)+
-  geom_text(aes(label=value),stat='identity',position=position_fill(vjust=0.5))+
-  coord_flip()
-
-pdf(paste0("Figure1E_whole_seurat_clusters_barpt_",Sys.Date(),".pdf"))
-barpt
-dev.off()
-
-
-
-
 ############Start here
 
 ####################################
 
-
-
-
-hsBCL9_pbmc_part<- pbmc[,which(pbmc$seurat_clusters %in% c(3))]
-
-#saveRDS(hsBCL9_pbmc_part, file = "BCL9_scRNA_TAM.rds")
-
 setwd("E:/BaiduNetdiskDownload/Manuscript of scRNAseq BCL9 KD in mouse TIME/revised/TAM")
 
-
-#hsBCL9_pbmc_part<-readRDS("BCL9_scRNA_TAM.rds")
+hsBCL9_pbmc_part<-readRDS("BCL9_scRNA_TAM.rds")
 
 
 #hsBCL9_pbmc_part<- hsBCL9_pbmc_part[,which((hsBCL9_pbmc_part$seurat_clusters %in% c(0:9)))]
@@ -285,11 +144,6 @@ pbmc.markers <- FindAllMarkers(hsBCL9_pbmc_part, only.pos = TRUE, min.pct = 0.25
 pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
-
-
-################################################################
-#########################Figure 1 D ############################
-################################################################
 
 pdf(paste0("TAM_hsBCL9_pbmc_part_Seurat_DoHeatmap_",Sys.Date(),".pdf"),10,40)
 print(DoHeatmap(hsBCL9_pbmc_part, features = top10$gene) + NoLegend())
@@ -613,34 +467,7 @@ dev.off()
 
 
 
-
-
-
-
-
-
-
-
 ###############################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -695,15 +522,6 @@ hsBCL9_pbmc_part2_9_12 <- RunUMAP(hsBCL9_pbmc_part2_9_12, dims = 1:20)
 hsBCL9_pbmc_part2_9_12 <- RunTSNE(hsBCL9_pbmc_part2_9_12, dims = 1:20)
 
 hsBCL9_pbmc_part2_9_12 <- FindClusters(hsBCL9_pbmc_part2_9_12, resolution = 0.5)
-
-
-
-
-
-
-
-
-
 
 
 palette_seurat_clusters<-distinctColorPalette(length(unique(hsBCL9_pbmc_part2_9_12$seurat_clusters)))
@@ -764,8 +582,6 @@ dev.off()
 
 
 
-
-
 seurat_clusters_count<-data.frame(seurat_clusters=hsBCL9_pbmc_part2_9_12$seurat_clusters,Group=hsBCL9_pbmc_part2_9_12$Group)
 seurat_clusters_count<-t(table(seurat_clusters_count))
 barpt<-ggplot(melt(seurat_clusters_count), aes(fill=Group, y=value, x=as.character(seurat_clusters))) + 
@@ -780,31 +596,17 @@ dev.off()
 
 
 
-
-
-
-
 pbmc.markers <- FindAllMarkers(hsBCL9_pbmc_part2_9_12, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25, num.cores = 64)
 pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
 
 
-################################################################
-#########################Figure 1 D ############################
-################################################################
+
 
 pdf(paste0("TAM_hsBCL9_pbmc_part2_9_12_Seurat_DoHeatmap_",Sys.Date(),".pdf"),10,40)
 print(DoHeatmap(hsBCL9_pbmc_part2_9_12, features = top10$gene) + NoLegend())
 dev.off()
-
-
-
-
-
-
-
-
 
 
 endo_list<-c("Hbegf","Cav2","Phgdh","Esm1","Hspa5","Lars2","Gm26917","Cebpd","Serping1","Id3","Ogn","Serpinf1","Mgp","Dcn","Cp","Tmem176b","Aspn","Gzmc","Gzma","Ccl5","Cd52","AW112010","Cd3e","Ltb","Gzmb","Il2rb","Nkg7","Ubc","Rad21","H1f0","Col1a1","Hist1h1e","Col3a1","Hist1h1b","Gm42418","AY036118","Hist1h2af","Cxcl10","Ly6a","Il1b","Ifit1","Dusp1","Isg15","Irf7","Rsad2","Ly6c2","Plac8","Ccl8","Wfdc17","Pf4","Ccl6","Ccl12","Lyz2","Apoe","C1qb","C1qc","C1qa","Nppb","Krt20","Qrfp","2200002D01Rik","Lxn","Igfbp6","Prkg2","Timp1","Hmga1","Lgals7","Tuba1c","Cdc20","Cenpa","Cenpf","Cks2","Tubb4b","Top2a","Birc5","Ube2c","Hmgb2")
@@ -941,10 +743,6 @@ dev.off()
 
 
 
-
-
-
-
 expressed_genes <- row.names(subset(fData(HSMM_myo), num_cells_expressed >= 100))
 
 diff_test_res <- differentialGeneTest(HSMM_myo[expressed_genes,],
@@ -984,7 +782,3 @@ dev.off()
 pdf(paste0("TAM_allcells_Step1_clusters_",Sys.Date(),".pdf"))
 print(DimPlot(pbmc, reduction = "umap", group.by = "Step1_clusters",cols = palette_Sample))
 dev.off()
-
-
-
-unique(pbmc$Group)
